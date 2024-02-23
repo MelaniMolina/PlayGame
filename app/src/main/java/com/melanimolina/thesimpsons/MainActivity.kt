@@ -7,11 +7,13 @@ import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+
 
 class MainActivity : AppCompatActivity() {
     //<editor-fold desc="IMAGENES">
@@ -55,9 +57,11 @@ class MainActivity : AppCompatActivity() {
         var juntos=0
         var comida=0
 
-        var turno=0
-        var puntosJ1=1
-        var puntosJ2=1
+        var turno=1
+        var puntosJ1=0
+        var puntosJ2=0
+
+
         var numeroImagen=1
         var escuchar=true
     //</editor-fold>
@@ -221,87 +225,145 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun sonImagenesIguales(){
-        if(imagen1.drawable.constantState==imagen2.drawable.constantState){
+    private fun sonImagenesIguales() {
+        if (imagen1.drawable.constantState == imagen2.drawable.constantState) {
             sonido("success")
-            if(turno==1){
+
+            if (turno == 1) {
                 puntosJ1++
-                tv_j1.text="Jugador 1: $puntosJ1"
-            }else  if(turno==2){
-                puntosJ1++
-                tv_j2.text="Jugador 2: $puntosJ2"
+            } else if (turno == 2) {
+                puntosJ2++
             }
-            imagen1.isEnabled=false
-            imagen2.isEnabled=false
-            imagen1.tag=""
-            imagen2.tag=""
-        }else{
+
+            Log.d("JUEGO", "Puntos después de acertar: J1=$puntosJ1, J2=$puntosJ2")
+
+            actualizarPuntos()
+
+            imagen1.isEnabled = false
+            imagen2.isEnabled = false
+            imagen1.tag = ""
+            imagen2.tag = ""
+        } else {
             sonido("no")
+
+            cambiarTurno()
+
+            Log.d("JUEGO", "Puntos después de cambiar turno: J1=$puntosJ1, J2=$puntosJ2")
+
             imagen1.setImageResource(R.drawable.oculta)
             imagen2.setImageResource(R.drawable.oculta)
-            if(turno==1){
-                turno=2
-                tv_j1.setTextColor(Color.GRAY)
-                tv_j2.setTextColor(Color.WHITE)
-            }else if(turno==2){
-                turno=1
-                tv_j1.setTextColor(Color.WHITE)
-                tv_j2.setTextColor(Color.GRAY)
-            }
         }
-        iv_11.isEnabled=!iv_11.tag.toString().isEmpty()
-        iv_12.isEnabled=!iv_12.tag.toString().isEmpty()
-        iv_13.isEnabled=!iv_13.tag.toString().isEmpty()
-        iv_14.isEnabled=!iv_14.tag.toString().isEmpty()
-        iv_21.isEnabled=!iv_21.tag.toString().isEmpty()
-        iv_22.isEnabled=!iv_22.tag.toString().isEmpty()
-        iv_23.isEnabled=!iv_23.tag.toString().isEmpty()
-        iv_24.isEnabled=!iv_24.tag.toString().isEmpty()
-        iv_31.isEnabled=!iv_31.tag.toString().isEmpty()
-        iv_32.isEnabled=!iv_32.tag.toString().isEmpty()
-        iv_33.isEnabled=!iv_33.tag.toString().isEmpty()
-        iv_34.isEnabled=!iv_34.tag.toString().isEmpty()
+        habilitarImagenes()
+    }
+
+    private fun cambiarTurno() {
+        if (turno == 1) {
+            turno = 2
+            tv_j1.setTextColor(Color.GRAY)
+            tv_j2.setTextColor(Color.WHITE)
+        } else if (turno == 2) {
+            turno = 1
+            tv_j1.setTextColor(Color.WHITE)
+            tv_j2.setTextColor(Color.GRAY)
+        }
+    }
+
+    private fun actualizarPuntos() {
+        Log.d("JUEGO", "Texto antes de actualizar: J1=${tv_j1.text}, J2=${tv_j2.text}")
+
+        // Asegúrate de que el texto inicial de tv_j1 y tv_j2 no incluya el prefijo "Jugador 1:" o "Jugador 2:"
+        val textoInicialJ1 = tv_j1.text.toString()
+        val textoInicialJ2 = tv_j2.text.toString()
+
+        val nuevoTextoJ1 = if (textoInicialJ1.startsWith("Jugador 1:")) textoInicialJ1.removePrefix("Jugador 1: ") else textoInicialJ1
+        val nuevoTextoJ2 = if (textoInicialJ2.startsWith("Jugador 2:")) textoInicialJ2.removePrefix("Jugador 2: ") else textoInicialJ2
+
+        tv_j1.text = "Jugador 1: $puntosJ1"
+        tv_j2.text = "Jugador 2: $puntosJ2"
+
+        Log.d("JUEGO", "Texto después de actualizar: J1=${tv_j1.text}, J2=${tv_j2.text}")
+    }
+    private fun reiniciarJuego() {
+        puntosJ1 = 0
+        puntosJ2 = 0
+        turno = 1
+        numeroImagen = 1
+        escuchar = true
+
+        imagenesArray.shuffle()
+
+        habilitarImagenes()
+
+        sonido("background", true)
+
+        actualizarPuntos()
+    }
+
+    private fun reiniciarTurno() {
+        turno = 1
+        tv_j1.setTextColor(Color.GRAY)
+        tv_j2.setTextColor(Color.WHITE)
+    }
+
+    private fun habilitarImagenes() {
+        iv_11.isEnabled = iv_11.tag.toString().isNotEmpty()
+        iv_12.isEnabled = iv_12.tag.toString().isNotEmpty()
+        iv_13.isEnabled = iv_13.tag.toString().isNotEmpty()
+        iv_14.isEnabled = iv_14.tag.toString().isNotEmpty()
+        iv_21.isEnabled = iv_21.tag.toString().isNotEmpty()
+        iv_22.isEnabled = iv_22.tag.toString().isNotEmpty()
+        iv_23.isEnabled = iv_23.tag.toString().isNotEmpty()
+        iv_24.isEnabled = iv_24.tag.toString().isNotEmpty()
+        iv_31.isEnabled = iv_31.tag.toString().isNotEmpty()
+        iv_32.isEnabled = iv_32.tag.toString().isNotEmpty()
+        iv_33.isEnabled = iv_33.tag.toString().isNotEmpty()
+        iv_34.isEnabled = iv_34.tag.toString().isNotEmpty()
+
         verificarFinJuego()
     }
 
     private fun verificarFinJuego() {
         if (
-            iv_11.tag.toString().isEmpty() &&
-            iv_12.tag.toString().isEmpty() &&
-            iv_13.tag.toString().isEmpty() &&
-            iv_14.tag.toString().isEmpty() &&
-            iv_21.tag.toString().isEmpty() &&
-            iv_22.tag.toString().isEmpty() &&
-            iv_23.tag.toString().isEmpty() &&
-            iv_24.tag.toString().isEmpty() &&
-            iv_31.tag.toString().isEmpty() &&
-            iv_32.tag.toString().isEmpty() &&
-            iv_33.tag.toString().isEmpty() &&
-            iv_34.tag.toString().isEmpty()
+            iv_11.tag.toString().isNotEmpty() ||
+            iv_12.tag.toString().isNotEmpty() ||
+            iv_13.tag.toString().isNotEmpty() ||
+            iv_14.tag.toString().isNotEmpty() ||
+            iv_21.tag.toString().isNotEmpty() ||
+            iv_22.tag.toString().isNotEmpty() ||
+            iv_23.tag.toString().isNotEmpty() ||
+            iv_24.tag.toString().isNotEmpty() ||
+            iv_31.tag.toString().isNotEmpty() ||
+            iv_32.tag.toString().isNotEmpty() ||
+            iv_33.tag.toString().isNotEmpty() ||
+            iv_34.tag.toString().isNotEmpty()
         ) {
-            if (::mp.isInitialized && mp.isPlaying) {
-                mp.stop()
-                mp.release()
-            }
-            sonido("win")
-            val builder = AlertDialog.Builder(this)
-            builder
-                .setTitle("FIN DEL JUEGO")
-                .setMessage("PUNTAJE \nJugador 1: $puntosJ1\nJugador 2: $puntosJ2")
-                .setCancelable(false)
-                .setPositiveButton("Nuevo Juego",
-                    DialogInterface.OnClickListener { dialogInterface, i ->
-                        val intent = Intent(this, MainActivity::class.java)
-                        startActivity(intent)
-                        finish()
-                    })
-                .setNegativeButton("SALIR",
-                    DialogInterface.OnClickListener { dialogInterface, i ->
-                        finish()
-                    })
-            val ad = builder.create()
-            ad.show()
+            // Si hay imágenes habilitadas, simplemente salir de la función
+            return
         }
+
+        // Si todas las imágenes están deshabilitadas, mostrar el mensaje de fin del juego
+        if (::mp.isInitialized && mp.isPlaying) {
+            mp.stop()
+            mp.release()
+        }
+        sonido("win")
+        val builder = AlertDialog.Builder(this)
+        builder
+            .setTitle("FIN DEL JUEGO")
+            .setMessage("PUNTAJE \nJugador 1: $puntosJ1\nJugador 2: $puntosJ2")
+            .setCancelable(false)
+            .setPositiveButton("Nuevo Juego",
+                DialogInterface.OnClickListener { dialogInterface, i ->
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                })
+            .setNegativeButton("SALIR",
+                DialogInterface.OnClickListener { dialogInterface, i ->
+                    finish()
+                })
+        val ad = builder.create()
+        ad.show()
     }
 
     private fun desahabilitarImagenes(){
