@@ -7,25 +7,14 @@ Juego sencillo de Android Nativo desarrollado con Android Studio en Kotlin. La a
 
 ### Imágenes de la aplicación funcional:
 
-- Icono de la aplicación
-![image](https://github.com/MelaniMolina/PlayGame/assets/113868310/8b8d4f5e-1c42-462a-b968-e5226034f957)
+- **Icono de la aplicación:**
+  ![Icono de la aplicación](https://github.com/MelaniMolina/PlayGame/blob/main/assets/113868310/8b8d4f5e-1c42-462a-b968-e5226034f957.png)
 
+- **Juego pantalla principal:**
+  ![Juego pantalla principal](https://github.com/MelaniMolina/PlayGame/blob/main/assets/113868310/893bb5e5-0302-4b47-8008-b4174d00ee12.png)
 
-
-  
-- Juego pantalla principal
-![image](https://github.com/MelaniMolina/PlayGame/assets/113868310/893bb5e5-0302-4b47-8008-b4174d00ee12)
-
-
-
-
-
-
-  
-- Fin del juego
-
-  ![image](https://github.com/MelaniMolina/PlayGame/assets/113868310/a29228c2-9787-4812-baa0-8a4169f1ad36)
-
+- **Fin del juego:**
+  ![Fin del juego](https://github.com/MelaniMolina/PlayGame/blob/main/assets/113868310/a29228c2-9787-4812-baa0-8a4169f1ad36.png)
 
 
 
