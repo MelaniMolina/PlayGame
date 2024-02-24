@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "270514155115",
+    "project_id": "delta-carving-410301",
+    "storage_bucket": "delta-carving-410301.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:270514155115:android:9859786ed84d1626eccb2e",
+        "android_client_info": {
+          "package_name": "com.melanimolina.thesimpsons"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9tuYZ0Z82R2wna1vChl3MdiAqAFdy7HI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

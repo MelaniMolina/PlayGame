@@ -3,7 +3,9 @@ package com.melanimolina.thesimpsons
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.media.MediaPlayer
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Looper
@@ -13,7 +15,13 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
 
+
+// Importa las clases necesarias
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
     //<editor-fold desc="IMAGENES">
@@ -64,12 +72,16 @@ class MainActivity : AppCompatActivity() {
 
         var numeroImagen=1
         var escuchar=true
+
+        val idJugador1 = "jugador1"
+        val idJugador2 = "jugador2"
     //</editor-fold>
 
+    // Agrega una referencia a la colección principal de Firestore
+    private val db = FirebaseFirestore.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         enlazarInterfaz()
         sonido("background", true)
 
@@ -173,12 +185,34 @@ class MainActivity : AppCompatActivity() {
             mpFondo.release()
         }
     }
-    //Mezcla de imagenes
-    fun selecionar(imagen: View){
+
+    fun selecionar(imagen: View) {
         sonido("touch")
-        var tag = imagen.tag.toString().toInt()
+        val tag = imagen.tag.toString().toInt()
         verificar(imagen)
+
+        // Almacena la interacción en Firestore
+        almacenarInteraccion(tag)
     }
+    private fun almacenarInteraccion(tag: Int) {
+        val jugadorActual = if (turno == 1) idJugador1 else idJugador2
+
+        val nuevaInteraccion = hashMapOf(
+            "tag" to tag,
+            "jugador" to jugadorActual,
+            "timestamp" to FieldValue.serverTimestamp()
+        )
+
+        db.collection("interacciones")
+            .add(nuevaInteraccion)
+            .addOnSuccessListener {
+                Log.d("Firestore", "Interacción almacenada correctamente para $jugadorActual")
+            }
+            .addOnFailureListener { e ->
+                Log.e("Firestore", "Error al almacenar la interacción: $e")
+            }
+    }
+
     private  fun verificar(imagen: View){
         var iv=(imagen as ImageView)
         var tag=imagen.tag.toString().toInt()
@@ -380,5 +414,6 @@ class MainActivity : AppCompatActivity() {
         iv_33.isEnabled=false
         iv_34.isEnabled=false
     }
+
 
 }
