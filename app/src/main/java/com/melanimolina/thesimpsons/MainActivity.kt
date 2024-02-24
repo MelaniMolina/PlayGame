@@ -79,6 +79,7 @@ class MainActivity : AppCompatActivity() {
 
     // Agrega una referencia a la colección principal de Firestore
     private val db = FirebaseFirestore.getInstance()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -131,8 +132,9 @@ class MainActivity : AppCompatActivity() {
         tv_j1=findViewById(R.id.tv_j1)
         tv_j2=findViewById(R.id.tv_j2)
 
-        tv_j1.setTextColor(Color.GRAY)
-        tv_j2.setTextColor(Color.WHITE)
+        tv_j1.setTextColor(Color.WHITE)
+        tv_j2.setTextColor(Color.GRAY)
+
 
 
     }
@@ -305,7 +307,6 @@ class MainActivity : AppCompatActivity() {
     private fun actualizarPuntos() {
         Log.d("JUEGO", "Texto antes de actualizar: J1=${tv_j1.text}, J2=${tv_j2.text}")
 
-        // Asegúrate de que el texto inicial de tv_j1 y tv_j2 no incluya el prefijo "Jugador 1:" o "Jugador 2:"
         val textoInicialJ1 = tv_j1.text.toString()
         val textoInicialJ2 = tv_j2.text.toString()
 
@@ -331,6 +332,8 @@ class MainActivity : AppCompatActivity() {
         sonido("background", true)
 
         actualizarPuntos()
+
+
     }
 
     private fun reiniciarTurno() {
@@ -371,11 +374,11 @@ class MainActivity : AppCompatActivity() {
             iv_33.tag.toString().isNotEmpty() ||
             iv_34.tag.toString().isNotEmpty()
         ) {
-            // Si hay imágenes habilitadas, simplemente salir de la función
+
             return
         }
 
-        // Si todas las imágenes están deshabilitadas, mostrar el mensaje de fin del juego
+
         if (::mp.isInitialized && mp.isPlaying) {
             mp.stop()
             mp.release()
